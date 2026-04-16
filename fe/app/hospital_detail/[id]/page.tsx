@@ -247,7 +247,6 @@ const createSheet = (data: any[]) => {
                 <a
                   href={hospital?.website}
                   target="_blank"
-                  rel="noopener noreferrer"
                   className="text-blue-500 hover:underline"
                 >
                   {hospital?.website}
