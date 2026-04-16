@@ -848,7 +848,7 @@ const validateHospitalForm = (form: any) => {
           }
         );
         alert("✅ Lưu dữ liệu thành công!");
-        router.push("/hospital_data_profiling");
+        router.push("/hospital_list");
 
     } catch (error: any) {
       console.log(error.response?.data); 

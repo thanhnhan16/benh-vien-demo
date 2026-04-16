@@ -199,56 +199,208 @@ const createSheet = (data: any[]) => {
 
       {/* 🏥 HOSPITAL INFO */}
       <Section title="🏥 Thông tin bệnh viện">
-        <Grid>
-          <Item label="Tên bệnh viện" value={hospital?.hospitalName || "N/A"} />
-          <Item label="Loại bệnh viện" value={hospital?.hospitalType} />
-          <Item label="Cơ quan chủ quản" value={hospital?.managingOrg} />
-          <Item label="Chuyên khoa chính" value={hospital?.mainSpecialty} />
-          <Item label="Chuyên khoa mũi nhọn" value={hospital?.keySpecialty} />
-          <Item label="Giường bệnh" value={hospital?.bedCount} />
-          <Item label="Ngoại trú/năm" value={hospital?.outpatientPerYear} />
-          <Item label="Nội trú/năm" value={hospital?.inpatientPerYear} />
-          <Item label="Phẫu thuật/năm" value={hospital?.surgeryPerYear} />
-          <Item label="Địa chỉ" value={hospital?.address} />
-          <Item label="Website" value={hospital?.website} />
-        </Grid>
+        <table className="w-full">
+          <tbody>
+            <tr>
+              <td className="font-semibold w-1/3">Tên bệnh viện:</td>
+              <td>{hospital?.hospitalName }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Loại bệnh viện:</td>
+              <td>{hospital?.hospitalType }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Cơ quan chủ quản:</td>
+              <td>{hospital?.managingOrg }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Chuyên khoa chính:</td>
+              <td>{hospital?.mainSpecialty }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Chuyên khoa mũi nhọn:</td>
+              <td>{hospital?.keySpecialty }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Giường bệnh:</td>
+              <td>{hospital?.bedCount }</td>
+            </tr>
+             <tr>
+              <td className="font-semibold w-1/3">Ngoại trú/năm:</td>
+              <td>{hospital?.outpatientPerYear }</td>
+            </tr>
+             <tr>
+              <td className="font-semibold w-1/3">Nội trú/năm:</td>
+              <td>{hospital?.inpatientPerYear }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Phẫu thuật/năm:</td>
+              <td>{hospital?.surgeryPerYear }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Địa chỉ:</td>
+              <td>{hospital?.address }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/3">Website:</td>
+              <td >
+                <a
+                  href={hospital?.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  {hospital?.website}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </Section>
 
       {/* 👥 CONTACTS */}
+
       <Section title="👥 Đầu mối tham gia">
-        {contacts.map((c: any, i: number) => (
+        
+          {contacts.map((c: any, i: number) => (
           <div key={i} className="border p-3 rounded mb-2">
-            <div>Lãnh đạo phụ trách: {c.leader}</div>
-            <div>Phòng KHTH / phòng phụ trách: {c.department}</div>
-            <div>Bác sĩ/chuyên gia lâm sàng tham gia: {c.doctor}</div>
-            <div>Dược sĩ dược lâm sàng tham gia: {c.pharmacist}</div>
-            <div>Đầu mối CNTT / dữ liệu: {c.it}</div>
-            <div>Người tổng hợp biểu mẫu: {c.owner}</div>
+            <table className="w-full">
+              <tbody>
+                <tr>
+                  <td className="font-semibold w-1/3">
+                    Lãnh đạo phụ trách:
+                  </td>
+                  <td className="">
+                    {c.leader}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-semibold">
+                    Phòng KHTH / phòng phụ trách:
+                  </td>
+                  <td >
+                    {c.department}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className=" font-semibold">
+                   Bác sĩ/chuyên gia lâm sàng tham gia:
+                  </td>
+                  <td >
+                    {c.doctor}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className=" font-semibold">
+                   Dược sĩ dược lâm sàng tham gia:
+                  </td>
+                  <td >
+                    {c.pharmacist}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-semibold">
+                   Đầu mối CNTT / dữ liệu:
+                  </td>
+                  <td className="">
+                    {c.it}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className="font-semibold">
+                   Người tổng hợp biểu mẫu:
+                  </td>
+                  <td >
+                    {c.owner}
+                  </td>
+                </tr>
+              </tbody>
+            </table>    
           </div>
         ))}
-      </Section>
+       
+    </Section>
+      
 
       {/* 🧠 STRENGTHS */}
       <Section title="🧠 Thế mạnh chuyên môn">
-        <Grid>
-          <Item label="Chuyên khoa chính: " value={strengths.mainSpecialty} />
-          <Item label="Nhóm bệnh phổ biến: " value={strengths.topDiseases} />
-          <Item label="Nhóm bệnh thuộc thế mạnh chuyên môn: " value={strengths.strongDiseases} />
-          <Item label="Kỹ thuật đặc thù / kỹ thuật cao đang triển khai" value={strengths.techniques} />
-          <Item label="Kỹ thuật lợi thế nổi bật của bệnh viện" value={strengths.highlightTechniques} />
-          <Item label="Dịch vụ hoặc quy trình chuyên môn nào khác biệt so với bệnh viện khác" value={strengths.uniqueServices} />
-          <Item label="Nhóm bệnh hoặc nhóm bệnh nhân mà bệnh viện tiếp nhận nhiều nhất" value={strengths.mainPatientGroup} />
-          <Item label="Số bệnh nhân/năm" value={strengths.patientPerYear} />
-          <Item label="Số ca bệnh đặc thù/năm" value={strengths.specialCases} />
-          <Item label="Số ca nặng / ICU / cấp cứu liên quan" value={strengths.icuCases} />
-          <Item label="Thời gian tích lũy dữ liệu của chuyên khoa thế mạnh" value={strengths.dataDuration} />
-          <Item label="Số năm triển khai kỹ thuật đặc thù" value={strengths.techYears} />
-          <Item label="Có chuỗi dữ liệu theo dõi dài hạn hay không" value={strengths.longTermData ? "Có" : "Không"} />
-          <Item label="Theo dõi bao lâu" value={strengths.trackingTime} />
-          <Item label="Lĩnh vực giỏi nhất trong hệ thống y tế thành phố" value={strengths.topTierSpecialty} />
-          <Item label="Nhóm bệnhcó thể đại diện tiêu biểu cho TP.HCM" value={strengths.representativeDiseases} />
-          <Item label="Bài toán (vấn đề) nàonếu giải được sẽ tạo tác động lớn nhất" value={strengths.highImpactProblem} />
-        </Grid>
+         <table className="w-full">
+          <tbody>
+            <tr>
+              <td className="font-semibold w-1/2">Chuyên khoa chính</td>
+              <td>{strengths?.mainSpecialty }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Nhóm bệnh phổ biến</td>
+              <td>{strengths?.topDiseases }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Nhóm bệnh thuộc thế mạnh chuyên môn</td>
+              <td>{strengths?.strongDiseases }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Kỹ thuật đặc thù / kỹ thuật cao đang triển khai</td>
+              <td>{strengths?.techniques }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Kỹ thuật lợi thế nổi bật của bệnh viện</td>
+              <td>{strengths?.highlightTechniques }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Dịch vụ hoặc quy trình chuyên môn nào khác biệt so với bệnh viện khác</td>
+              <td>{strengths?.uniqueServices }</td>
+            </tr>
+             <tr>
+              <td className="font-semibold w-1/2">Nhóm bệnh hoặc nhóm bệnh nhân mà bệnh viện tiếp nhận nhiều nhất</td>
+              <td>{strengths?.mainPatientGroup}</td>
+            </tr>
+             <tr>
+              <td className="font-semibold w-1/2">Số bệnh nhân/năm</td>
+              <td>{strengths?.patientPerYear}</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Số ca bệnh đặc thù/năm</td>
+              <td>{strengths?.specialCases }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Số ca nặng / ICU / cấp cứu liên quan</td>
+              <td>{strengths?.icuCases }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Thời gian tích lũy dữ liệu của chuyên khoa thế mạnh</td>
+              <td>{strengths?.dataDuration }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Số năm triển khai kỹ thuật đặc thù</td>
+              <td>{strengths?.techYears }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Có chuỗi dữ liệu theo dõi dài hạn hay không</td>
+              <td>{strengths?.longTermData ? "Có" : "Không"}</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Theo dõi bao lâu</td>
+              <td>{strengths?.trackingTime || "Không có thông tin"}</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Lĩnh vực giỏi nhất trong hệ thống y tế thành phố</td>
+              <td>{strengths?.topTierSpecialty }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Nhóm bệnhcó thể đại diện tiêu biểu cho TP.HCM</td>
+              <td>{strengths?.representativeDiseases }</td>
+            </tr>
+            <tr>
+              <td className="font-semibold w-1/2">Bài toán (vấn đề) nàonếu giải được sẽ tạo tác động lớn nhất</td>
+              <td>{strengths?.highImpactProblem }</td>
+            </tr>
+          </tbody>
+        </table>
         
       </Section>
 
@@ -256,98 +408,106 @@ const createSheet = (data: any[]) => {
 
       <Section title="⚠️ Bài toán/Vấn đề cần giải quyết">
       {problems.map((p: any, i: number) => (
-        <div
-          key={i}
-          className="border p-4 rounded mb-3 grid grid-cols-2 gap-x-6 gap-y-2"
-        >
-          <div>
-            <span className="font-semibold">Tên bài toán:</span> {p.name}
-          </div>
+        <div  key={i} className="border p-4 rounded mb-3 gap-x-6 gap-y-2">
+          <table className="w-full ">
+            <tbody>
+              <tr>
+                <td className="font-semibold w-1/2">Tên bài toán</td>
+                <td>{p.name}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Mô tả:</span> {p.description}
-          </div>
+              <tr>
+                <td className="font-semibold">Mô tả</td>
+                <td>{p.description}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Nhóm bài toán:</span> {p.category}
-          </div>
+              <tr>
+                <td className="font-semibold">Nhóm bài toán</td>
+                <td>{p.category}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Bối cảnh:</span> {p.context}
-          </div>
+              <tr>
+                <td className="font-semibold">Bối cảnh</td>
+                <td>{p.context}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Tần suất:</span> {p.frequency}
-          </div>
+              <tr>
+                <td className="font-semibold">Tần suất</td>
+                <td>{p.frequency}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Mức độ:</span> {p.severity}
-          </div>
+              <tr>
+                <td className="font-semibold">Mức độ</td>
+                <td>{p.severity}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Quy mô ảnh hưởng:</span> {p.impact}
-          </div>
+              <tr>
+                <td className="font-semibold">Quy mô ảnh hưởng</td>
+                <td>{p.impact}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Đối tượng:</span> {p.affected}
-          </div>
+              <tr>
+                <td className="font-semibold">Đối tượng</td>
+                <td>{p.affected}</td>
+              </tr>
 
-          <div className="col-span-2">
-            <span className="font-semibold">
-              Quyết định cần hỗ trợ:
-            </span>{" "}
-            {p.decision}
-          </div>
+              <tr>
+                <td className="font-semibold">Quyết định cần hỗ trợ</td>
+                <td>{p.decision}</td>
+              </tr>
 
-          <div className="col-span-2">
-            <span className="font-semibold">
-              Giải pháp hiện tại:
-            </span>{" "}
-            {p.solution}
-          </div>
+              <tr>
+                <td className="font-semibold">Giải pháp hiện tại</td>
+                <td>{p.solution}</td>
+              </tr>
 
-          <div className="col-span-2">
-            <span className="font-semibold">
-              Hạn chế:
-            </span>{" "}
-            {p.limitations}
-          </div>
+              <tr>
+                <td className="font-semibold">Hạn chế</td>
+                <td>{p.limitations || "Không có thông tin"}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Giá trị:</span> {p.value}
-          </div>
+              <tr>
+                <td className="font-semibold">Giá trị</td>
+                <td>{p.value}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Chỉ số:</span> {p.metric}
-          </div>
+              <tr>
+                <td className="font-semibold">Chỉ số</td>
+                <td>{p.metric}</td>
+              </tr>
 
-          <div className="col-span-2">
-            <span className="font-semibold">
-              Khoa liên quan:
-            </span>{" "}
-            {p.department}
-          </div>
+              <tr>
+                <td className="font-semibold">Khoa liên quan</td>
+                <td>{p.department}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Có dữ liệu thật:</span> {p.hasRealData ? "Có" : "Không"}
-          </div>
+              <tr>
+                <td className="font-semibold">Có dữ liệu thật</td>
+                <td>{p.hasRealData ? "Có" : "Không"}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Bài toán xảy ra thường xuyên:</span> {p.isFrequent ? "Có" : "Không"}
-          </div>
+              <tr>
+                <td className="font-semibold">Bài toán xảy ra thường xuyên</td>
+                <td>{p.isFrequent ? "Có" : "Không"}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Có thể cải thiện bằng công nghệ:</span> {p.techImprovable ? "Có" : "Không"}
-          </div>
+              <tr>
+                <td className="font-semibold">Có thể cải thiện bằng công nghệ</td>
+                <td>{p.techImprovable ? "Có" : "Không"}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Có thể triển khai pilot trong 6–12 tháng:</span> {p.isPilotReady ? "Có" : "Không"}
-          </div>
+              <tr>
+                <td className="font-semibold">Có thể triển khai pilot trong 6–12 tháng</td>
+                <td>{p.isPilotReady ? "Có" : "Không"}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Có khả năng đề xuất cấp thành phố:</span> {p.isCityLevel ? "Có" : "Không"}
-          </div>
-          
+              <tr>
+                <td className="font-semibold">Có khả năng đề xuất cấp thành phố</td>
+                <td>{p.isCityLevel ? "Có" : "Không"}</td>
+              </tr>
+
+            </tbody>
+          </table>
         </div>
       ))}
     </Section>
@@ -356,67 +516,182 @@ const createSheet = (data: any[]) => {
       <Section title="📊 Nguồn dữ liệu hiện có">
         {dataSources.map((d: any, i: number) => (
           <div key={i} className="border p-3 rounded mb-2">
-            <div className="font-semibold">{d.name}</div>
-            <div>Quy mô dữ liệu hiện có: {d.scale}</div>
-            <div>Tần suất phát sinh theo tháng: {d.frequency}</div>
-            <div>Liên tục hay rời rạc: {d.type}</div>
-            <div>Lưu ở hệ thống nào: {d.system}</div>
-            <div>Đơn vị quản lý dữ liệu: {d.owner}</div>
-            <div>Thời gian tích lũy: {d.duration}</div>
-            <div>Có thể trích xuất được hay không: {d.exportable ? "Có" : "Không"}</div>
-            <div>Ghi chú : {d.note}</div>
+              <table className="w-full">
+                <tbody>
+                  <tr>
+                    <td className="font-semibold w-1/3">Tên dữ liệu</td>
+                    <td>{d.name}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Quy mô dữ liệu hiện có</td>
+                    <td>{d.scale}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Tần suất phát sinh theo tháng</td>
+                    <td>{d.frequency}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Liên tục hay rời rạc</td>
+                    <td>{d.type}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Lưu ở hệ thống nào</td>
+                    <td>{d.system}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Đơn vị quản lý dữ liệu</td>
+                    <td>{d.owner}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Thời gian tích lũy</td>
+                    <td>{d.duration}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Có thể trích xuất được hay không</td>
+                    <td>{d.exportable ? "Có" : "Không có"}</td>
+                  </tr>
+
+                  <tr>
+                    <td className="font-semibold">Ghi chú</td>
+                    <td>{d.note || "Không có thông tin"}</td>
+                  </tr>
+
+                </tbody>
+              </table>
           </div>
         ))}
       </Section>
 
       
       <Section title="Dữ liệu đặt thù vượt trội">
-        <div>
-             <div>
-            <span className="font-semibold">Dữ liệu nơi khác ít có hoặc không có:</span> {dataHighlights.uniqueData}
-          </div>
+        <div >
+          <table className="w-full">
+            <tbody>
+              <tr>
+                <td className="font-semibold w-1/3">
+                  Dữ liệu nơi khác ít có hoặc không có
+                </td>
+                <td>{dataHighlights.uniqueData}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Dữ liệu có quy mô lớn nhất:</span> {dataHighlights.largestScaleData}
-          </div>
+              <tr>
+                <td className="font-semibold">
+                  Dữ liệu có quy mô lớn nhất
+                </td>
+                <td>{dataHighlights.largestScaleData}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Dữ liệu có độ sâu nhất:</span> {dataHighlights.deepestData}
-          </div>
+              <tr>
+                <td className="font-semibold">
+                  Dữ liệu có độ sâu nhất
+                </td>
+                <td>{dataHighlights.deepestData}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Dữ liệu nào theo dõi dài hạn nhất:</span> {dataHighlights.longestFollowUpData}
-          </div>
+              <tr>
+                <td className="font-semibold">
+                  Dữ liệu nào theo dõi dài hạn nhất
+                </td>
+                <td>{dataHighlights.longestFollowUpData}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Dữ liệu đã được số hóa tốt nhất:</span> {dataHighlights.bestDigitalizedData}
-          </div>
-                   
-          <div>
-            <span className="font-semibold">Dữ liệu nào phù hợp nhất để làm dashboard/quản trị:</span> {dataHighlights.bestForDashboard}
-          </div>
+              <tr>
+                <td className="font-semibold">
+                  Dữ liệu đã được số hóa tốt nhất
+                </td>
+                <td>{dataHighlights.bestDigitalizedData}</td>
+              </tr>
 
-          <div>
-            <span className="font-semibold">Ví dụ minh họa cụ thể theo bệnh/chuyên khoa (nếu có):</span> {dataHighlights.caseStudyExample}
-          </div>
+              <tr>
+                <td className="font-semibold">
+                  Dữ liệu nào phù hợp nhất để làm dashboard/quản trị
+                </td>
+                <td>{dataHighlights.bestForDashboard}</td>
+              </tr>
+
+              <tr>
+                <td className="font-semibold">
+                  Ví dụ minh họa cụ thể theo bệnh/chuyên khoa (nếu có)
+                </td>
+                <td>{dataHighlights.caseStudyExample}</td>
+              </tr>
+
+            </tbody>
+          </table>
         </div>
       </Section>
 
       <Section title="Khả năng liên kết dữ liệu">
-        <Grid>
-          <Item label="Có thể liên kết giữa các nguồn dữ liệu hay không" value={dataHighlights.canLinkSources ? "Có" : "Không"} />
-          <Item label="Có mã định danh để nối dữ liệu hay không" value={dataHighlights.hasUnifiedID ? "Có" : "Không"} />
-          <Item label="Có thể nối dữ liệu theo thời gian hay không" value={dataHighlights.canTrackTime ? "Có" : "Không"} />
-          <Item label="Có outcome / nhãn kết quả hay không" value={dataHighlights.hasOutcomes ? "Có" : "Không"} />
-          <Item label="Có dữ liệu follow-up hay không" value={dataHighlights.hasFollowUp ? "Có" : "Không"} />
-          <Item label="Có dữ liệu đa phương thức hay không" value={dataHighlights.isMultimodal ? "Có" : "Không"} />
-        </Grid>
+        <table className="w-full">
+          <tbody>
+            <tr>
+              <td className="font-semibold w-1/3">
+                Có thể liên kết giữa các nguồn dữ liệu hay không
+              </td>
+              <td>
+                {dataHighlights.canLinkSources ? "Có" : "Không"}
+              </td>
+            </tr>
+
+            <tr>
+              <td className="font-semibold">
+                Có mã định danh để nối dữ liệu hay không
+              </td>
+              <td>
+                {dataHighlights.hasUnifiedID ? "Có" : "Không"}
+              </td>
+            </tr>
+
+            <tr>
+              <td className="font-semibold">
+                Có thể nối dữ liệu theo thời gian hay không
+              </td>
+              <td>
+                {dataHighlights.canTrackTime ? "Có" : "Không"}
+              </td>
+            </tr>
+
+            <tr>
+              <td className="font-semibold">
+                Có outcome / nhãn kết quả hay không
+              </td>
+              <td>
+                {dataHighlights.hasOutcomes ? "Có" : "Không"}
+              </td>
+            </tr>
+
+            <tr>
+              <td className="font-semibold">
+                Có dữ liệu follow-up hay không
+              </td>
+              <td>
+                {dataHighlights.hasFollowUp ? "Có" : "Không"}
+              </td>
+            </tr>
+
+            <tr>
+              <td className="font-semibold">
+                Có dữ liệu đa phương thức hay không
+              </td>
+              <td>
+                {dataHighlights.isMultimodal ? "Có" : "Không"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </Section>
 
       {/* 🚀 READINESS */}
       <Section title="🚀 Mức sẵn sàng triển khai">
         <Grid>
-          <Item label="Khoa/phòng đầu mối" value={readiness.department} />
+          <Item label="Khoa/phòng đầu mối" value={readiness.department}  />
           <Item label="Lãnh đạo bảo trợ" value={readiness.leader} />
           <Item label="Chuyên gia lâm sàng phụ trách" value={readiness.expert} />
           <Item label="Đầu mối dữ liệu/CNTT" value={readiness.it} />
@@ -434,6 +709,20 @@ const createSheet = (data: any[]) => {
           <Item label="Có thể đề xuất cấp thành phố" value={readiness.cityProposal ? "Có" : "Không"} />
         </Grid>
       </Section>
+
+      <button
+        onClick={() => router.back()}
+        className="mb-4 bg-gray-200 px-3 py-1 rounded hover:bg-gray-300"
+      >
+      ← Quay lại
+      </button>
+
+      <button
+        onClick={exportToExcel}
+        className="mb-4 ml-2 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 "
+      >
+        ⬇️ Xuất Excel
+      </button>
 
     </div>
   );
@@ -456,7 +745,7 @@ function Grid({ children }: any) {
 
 function Item({ label, value }: any) {
   return (
-    <div className="text-sm">
+    <div >
       <span className="font-semibold">{label}:</span>{" "}
       <span>{value}</span>
     </div>
