@@ -107,17 +107,6 @@ getHospitalFull(id: string) {
         problems: 1,
         dataSources: 1,
         dataHighlights: 1,
-        // hospitalName: 1,
-        // hospitalType: 1,
-        // managingOrg: 1,
-        // mainSpecialty: 1,
-        // keySpecialty: 1,
-        // bedCount: 1,
-        // outpatientPerYear: 1,
-        // inpatientPerYear: 1,
-        // surgeryPerYear: 1,
-        // address: 1,
-        // website: 1,
       },
     },
   ]).then((res) => res[0]); 
@@ -131,8 +120,8 @@ getHospitalFull(id: string) {
     return `This action returns a #${id} hospital`;
   }
 
-  update(id: number, updateHospitalDto: UpdateHospitalDto) {
-    return `This action updates a #${id} hospital`;
+  update(id: string, updateHospitalDto: UpdateHospitalDto) {
+    return this.hospitalModel.findByIdAndUpdate(id, updateHospitalDto, { returnDocument: 'after' });
   }
 
   remove(id: number) {

@@ -34,10 +34,28 @@ export default function HospitalDetailPage() {
 
   const { contacts, strengths, problems, dataSources, dataHighlights, readiness, hospital } = data;
 
-  // 1. Sheet: Hospital info
 
- const hospitalSheet = [
-  {
+const toSection = (title: string, obj: any) => {
+  const rows = [
+    { "Tên trường": title, "Giá trị": "" }, // tiêu đề section
+  ];
+
+  Object.entries(obj).forEach(([key, value]) => {
+    rows.push({
+      "Tên trường": key,
+      "Giá trị": value as any,
+    });
+  });
+
+  rows.push({ "Tên trường": "", "Giá trị": "" }); // dòng trống
+
+  return rows;
+};
+
+const hospitalContactSheet = [
+  ...toSection("PHẦN 0. THÔNG TIN CHUNG",{}),
+
+  ...toSection("0.1 Thông tin đơn vị", {
     "Tên bệnh viện": hospital.hospitalName,
     "Loại bệnh viện": hospital.hospitalType,
     "Cơ quan chủ quản": hospital.managingOrg,
@@ -49,70 +67,79 @@ export default function HospitalDetailPage() {
     "Phẫu thuật/năm": hospital.surgeryPerYear,
     "Địa chỉ": hospital.address,
     "Website": hospital.website,
+  }),
 
-  },
-];
+  ...contacts.flatMap((c: any, index: number) =>
+  toSection(`Đầu mối tham gia workshop (${index + 1})`, {
+    "Lãnh đạo phụ trách": c.leader,
+    "Phòng KHTH": c.department,
+    "Bác sĩ tham gia": c.doctor,
+    "Dược sĩ": c.pharmacist,
+    "CNTT / dữ liệu": c.it,
+    "Người tổng hợp": c.owner,
+  })
+),
 
-  // 2. Contacts 
- const contactsSheet = contacts.map((c: any) => ({
-  "Lãnh đạo phụ trách": c.leader,
-  "Phòng KHTH": c.department,
-  "Bác sĩ tham gia": c.doctor,
-  "Dược sĩ": c.pharmacist,
-  "CNTT / dữ liệu": c.it,
-  "Người tổng hợp": c.owner,
-}));
-
-  // 3. Strengths
- const strengthsSheet = [
-  {
+ ...toSection("PHẦN A. THẾ MẠNH CHUYÊN MÔN",{}),
+ ...toSection("A1. Chuyên khoa mũi nhọn", {
     "Chuyên khoa chính": strengths.mainSpecialty,
-    "Nhóm bệnh phổ biến": strengths.topDiseases,
-    "Nhóm bệnh thế mạnh": strengths.strongDiseases,
-    "Kỹ thuật đang triển khai": strengths.techniques,
-    "Kỹ thuật nổi bật": strengths.highlightTechniques,
-    "Dịch vụ khác biệt": strengths.uniqueServices,
-    "Nhóm bệnh tiếp nhận nhiều": strengths.mainPatientGroup,
-    "Bệnh nhân/năm": strengths.patientPerYear,
-    "Ca đặc thù/năm": strengths.specialCases,
-    "Ca ICU/cấp cứu": strengths.icuCases,
-  },
-];
+    "Top 3 nhóm bệnh phổ biến": strengths.topDiseases,
+    "Top 3 nhóm bệnh thuộc thế mạnh chuyên môn": strengths.strongDiseases,
+    "Kỹ thuật đặt thù/cao đang triển khai": strengths.techniques,
+    "Kỹ thuật là lợi thế nổi bật": strengths.highlightTechniques,
+    "Dịch vụ hoặc quy trình khác biệt với bệnh viện khác": strengths.uniqueServices,
+    "Nhóm bệnh hoặc nhóm bệnh nhân tiếp nhận nhiều nhất": strengths.mainPatientGroup,
+  }),
+  ...toSection("A2. Quy mô hoạt động chuyên môn", {
+    "Số bệnh nhân/năm": strengths.patientPerYear,
+    "Số ca đặc thù/năm": strengths.specialCases,
+    "Số ca ICU/cấp cứu liên quan": strengths.icuCases,
+    "Thời gian tích lũy dữ liệu của chuyên khoa thế mạnh": strengths.dataDuration,
+    "Số năm triển khai kỹ thuật đặc thù": strengths.techYears,
+    "Có chuỗi dữ liệu theo dõi dài hạn hay không": strengths.longTermData ? "Có" : "Không",
+    "Nếu có, theo dõi bao lâu: ": strengths.trackingTime,
+  }),
+  ...toSection("A3. Nhận diện lợi thế chuyên môn", {
+    "1.	Bệnh viện “giỏi nhất” ở lĩnh vực nào trong hệ thống y tế thành phố": strengths.topTierSpecialty,
+    "2.	Nhóm bệnh nào bệnh viện có thể đại diện tiêu biểu cho TP.HCM? ": strengths.representativeDiseases,
+    "3.	Bài toán (vấn đề) nào của bệnh viện nếu giải được sẽ tạo tác động lớn nhất": strengths.highImpactProblem,
+  }),
 
-  // 4. Problems
-  const problemsSheet = problems.map((p: any) => ({
-  "Tên bài toán": p.name,
-  "Mô tả": p.description,
-  "Nhóm": p.category,
-  "Bối cảnh": p.context,
-  "Tần suất": p.frequency,
-  "Mức độ": p.severity,
-  "Ảnh hưởng": p.impact,
-  "Đối tượng": p.affected,
-  "Quyết định cần hỗ trợ": p.decision,
-  "Giải pháp hiện tại": p.solution,
-  "Hạn chế": p.limitations,
-  "Giá trị": p.value,
-  "Chỉ số": p.metric,
-  "Khoa liên quan": p.department,
-}));
+ ...toSection("PHẦN B. DANH MỤC BÀI TOÁN/ VẤN ĐỀ CẦN GIẢI QUYẾT ƯU TIÊN",{}),
+   ...problems.flatMap((p: any, index: number) =>
+      toSection(`Bài toán cần giải quyết (${index + 1})`, {
+      "Tên bài toán": p.name,
+      "Mô tả": p.description,
+      "Nhóm": p.category,
+      "Bối cảnh": p.context,
+      "Tần suất": p.frequency,
+      "Mức độ": p.severity,
+      "Ảnh hưởng": p.impact,
+      "Đối tượng": p.affected,
+      "Quyết định cần hỗ trợ": p.decision,
+      "Giải pháp hiện tại": p.solution,
+      "Hạn chế": p.limitations,
+      "Giá trị": p.value,
+      "Chỉ số": p.metric,
+      "Khoa liên quan": p.department,
+      })
+),
 
-  // 5. Data sources
- const dataSourcesSheet = dataSources.map((d: any) => ({
-  "Tên nguồn": d.name,
-  "Quy mô dữ liệu": d.scale,
-  "Tần suất": d.frequency,
-  "Loại dữ liệu": d.type,
-  "Hệ thống lưu trữ": d.system,
-  "Đơn vị quản lý": d.owner,
-  "Thời gian tích lũy": d.duration,
-  "Có thể xuất": d.exportable ? "Có" : "Không",
-  "Ghi chú": d.note,
-}));
-
-// 5.2 Data highlights
-const dataHighlightsSheet = [
-  {
+ ...toSection("PHẦN C. LỢI THẾ DỮ LIỆU",{}),
+ ...toSection("C1. Danh mục dữ liệu hiện có",{}),
+ ...dataSources.flatMap((d: any, index: number) =>
+      toSection(d.name, {
+        "Quy mô dữ liệu": d.scale,
+        "Tần suất": d.frequency,
+        "Loại dữ liệu": d.type,
+        "Hệ thống lưu trữ": d.system,
+        "Đơn vị quản lý": d.owner,
+        "Thời gian tích lũy": d.duration,
+        "Có thể xuất": d.exportable ? "Có" : "Không",
+        "Ghi chú": d.note,
+      })
+),
+ ...toSection("C2. Dữ liệu đặc thù và vượt trội", {
     "Dữ liệu nơi khác ít có ": dataHighlights.uniqueData,
     "Dữ liệu có quy mô lớn nhất": dataHighlights.largestScaleData,
     "Dữ liệu nào có độ sâu nhất ": dataHighlights.deepestData,
@@ -120,52 +147,61 @@ const dataHighlightsSheet = [
     "Dữ liệu nào đã được số hóa tốt nhất": dataHighlights.bestDigitalizedData,
     "Dữ liệu nào phù hợp nhất để làm dashboard/quản trị": dataHighlights.bestForDashboard,
     "Ví dụ minh họa cụ thể theo bệnh/chuyên khoa (nếu có)": dataHighlights.caseStudyExample,
-    "Có thể liên kết giữa các nguồn dữ liệu hay không": dataHighlights.canLinkSources ? "Có" : "Không",
+  }),
+   ...toSection("C3. Khả năng liên kết dữ liệu", {
+   "Có thể liên kết giữa các nguồn dữ liệu hay không": dataHighlights.canLinkSources ? "Có" : "Không",
     "Có mã định danh để nối dữ liệu hay không": dataHighlights.hasUnifiedID ? "Có" : "Không",
     "Có thể nối dữ liệu theo thời gian hay không": dataHighlights.canTrackTime ? "Có" : "Không",
     "Có outcome / nhãn kết quả hay không": dataHighlights.hasOutcomes ? "Có" : "Không",
     "Có dữ liệu follow-up hay không": dataHighlights.hasFollowUp ? "Có" : "Không",
     "Có dữ liệu đa phương thức hay không": dataHighlights.isMultimodal ? "Có" : "Không",
-  }];
+  }),
 
-  // 6. Readiness
-  const readinessSheet = [
-  {
-    "Khoa phụ trách": readiness.department,
-    "Lãnh đạo bảo trợ": readiness.leader,
-    "Chuyên gia": readiness.expert,
-    "CNTT": readiness.it,
-    "Nghiên cứu": readiness.research,
-    "Liên ngành": readiness.interdisciplinary ? "Có" : "Không",
-    "Có owner": readiness.hasOwner ? "Có" : "Không",
-    "Có dữ liệu": readiness.hasData ? "Có" : "Không",
-    "Có truy xuất": readiness.hasAccess ? "Có" : "Không",
-    "Chuẩn hoá được": readiness.standardizable ? "Có" : "Không",
-    "Pilot": readiness.pilot ? "Có" : "Không",
-  },
+ ...toSection("PHẦN F. MỨC ĐỘ SẴN SÀNG TRIỂN KHAI",{}),
+ ...toSection("F1. Đầu mối triển khai nội bộ", {
+      "Khoa/phòng đầu mối: ": readiness.department,
+      "Lãnh đạo bảo trợ:": readiness.leader,
+      "Chuyên gia lâm sàng phụ trách:": readiness.expert,
+      "Đầu mối dữ liệu/CNTT:": readiness.it,
+      "Đầu mối nghiên cứu/KH&CN:": readiness.research,
+      "Dược lâm sàng / quản trị / điều dưỡng liên quan:": readiness.relatedClinicalDepartments ? "Có" : "Không",
+      "Có nhóm liên ngành nội bộ hay chưa:": readiness.interdisciplinary ? "Có" : "Không",
+  }),
+  ...toSection("F2. Mức sẵn sàng triển khai", {
+      "Có người chịu trách nhiệm chính:": readiness.hasOwner ? "Có" : "Không",
+      "Có dữ liệu": readiness.hasData ? "Có" : "Không",
+      "Có quyền truy xuất": readiness.hasAccess ? "Có" : "Không",
+      "Có khả năng chuẩn hóa:": readiness.standardizable ? "Có" : "Không",
+      "Có thể làm pilot: ": readiness.pilot ? "Có" : "Không",
+
+      "Có khoa/phòng sẵn sàng phối hợp: ": readiness.readyDept ? "Có" : "Không",
+      "Có thể làm trong 6–12 tháng:": readiness.canPilot6to12Months ? "Có" : "Không",
+      "Có thể phối hợp với đối tác công nghệ:": readiness.partner ? "Có" : "Không",
+      "Có thể đề xuất cấp thành phố: ": readiness.cityProposal ? "Có" : "Không",
+  }),
+
 ];
+
+
+
+ 
 
 // Workbook
 const wb = XLSX.utils.book_new();
   
 
 const createSheet = (data: any[]) => {
-  const ws = XLSX.utils.json_to_sheet(data);
+  const ws = XLSX.utils.json_to_sheet(data, {skipHeader: true});
 
   // set width mặc định 50 cho tất cả cột
   const colCount = Object.keys(data?.[0] || {}).length;
-  ws["!cols"] = Array(colCount).fill({ wch: 30 });
+  ws["!cols"] = Array(colCount).fill({ wch: 50 });
 
   return ws;
   };
 
-  XLSX.utils.book_append_sheet(wb, createSheet(hospitalSheet), "Hospital");
-  XLSX.utils.book_append_sheet(wb, createSheet(contactsSheet), "Workshop");
-  XLSX.utils.book_append_sheet(wb, createSheet(strengthsSheet), "Strengths");
-  XLSX.utils.book_append_sheet(wb, createSheet(problemsSheet), "Problems");
-  XLSX.utils.book_append_sheet(wb, createSheet(dataSourcesSheet), "DataSources");
-  XLSX.utils.book_append_sheet(wb, createSheet(dataHighlightsSheet), "DataHighlights");
-  XLSX.utils.book_append_sheet(wb, createSheet(readinessSheet), "Readiness");
+  XLSX.utils.book_append_sheet(wb, createSheet(hospitalContactSheet), "Hospital");
+
   
 
   // Export file

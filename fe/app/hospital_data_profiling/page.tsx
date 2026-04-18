@@ -847,7 +847,7 @@ const validateHospitalForm = (form: any) => {
             hospitalId: hospitalRes.data._id,
           }
         );
-        alert("✅ Lưu dữ liệu thành công!");
+        alert(`✅ Đã lưu thành công dữ liệu bệnh viện: ${hospitalRes.data.hospitalName}!`);
         router.push("/hospital_list");
 
     } catch (error: any) {

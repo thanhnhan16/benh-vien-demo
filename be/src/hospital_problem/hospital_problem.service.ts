@@ -26,8 +26,8 @@ export class HospitalProblemService {
     return `This action returns a #${id} hospitalProblem`;
   }
 
-  update(id: number, updateHospitalProblemDto: UpdateHospitalProblemDto) {
-    return `This action updates a #${id} hospitalProblem`;
+  update(id: String, updateHospitalProblemDto: UpdateHospitalProblemDto) {
+       return this.model.findByIdAndUpdate(id, updateHospitalProblemDto, { returnDocument: 'after' });
   }
 
   remove(id: number) {

@@ -39,6 +39,9 @@ export class Hospital {
 
   @Prop()
   website?: string;
+
+   @Prop({ default: true })
+  isFeatured!: boolean;
 }
 
 export const HospitalSchema = SchemaFactory.createForClass(Hospital);

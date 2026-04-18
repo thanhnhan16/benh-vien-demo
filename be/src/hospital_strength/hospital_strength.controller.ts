@@ -24,7 +24,7 @@ export class HospitalStrengthController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalStrengthDto: UpdateHospitalStrengthDto) {
-    return this.hospitalStrengthService.update(+id, updateHospitalStrengthDto);
+    return this.hospitalStrengthService.update(id, updateHospitalStrengthDto);
   }
 
   @Delete(':id')

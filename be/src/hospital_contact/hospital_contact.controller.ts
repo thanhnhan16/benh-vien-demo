@@ -24,7 +24,7 @@ export class HospitalContactController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalContactDto: UpdateHospitalContactDto) {
-    return this.hospitalContactService.update(+id, updateHospitalContactDto);
+    return this.hospitalContactService.update(id, updateHospitalContactDto);
   }
 
   @Delete(':id')

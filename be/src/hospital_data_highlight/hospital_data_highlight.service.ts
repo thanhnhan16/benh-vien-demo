@@ -27,8 +27,8 @@ export class HospitalDataHighlightService {
     return `This action returns a #${id} hospitalDataHighlight`;
   }
 
-  update(id: number, updateHospitalDataHighlightDto: UpdateHospitalDataHighlightDto) {
-    return `This action updates a #${id} hospitalDataHighlight`;
+  update(id: String, updateHospitalDataHighlightDto: UpdateHospitalDataHighlightDto) {
+       return this.model.findByIdAndUpdate(id, updateHospitalDataHighlightDto, { returnDocument: 'after' });
   }
 
   remove(id: number) {

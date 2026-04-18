@@ -24,7 +24,7 @@ export class HospitalReadinessController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalReadinessDto: UpdateHospitalReadinessDto) {
-    return this.hospitalReadinessService.update(+id, updateHospitalReadinessDto);
+    return this.hospitalReadinessService.update(id, updateHospitalReadinessDto);
   }
 
   @Delete(':id')

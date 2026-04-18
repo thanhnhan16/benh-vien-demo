@@ -24,7 +24,7 @@ export class HospitalDataHighlightController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalDataHighlightDto: UpdateHospitalDataHighlightDto) {
-    return this.hospitalDataHighlightService.update(+id, updateHospitalDataHighlightDto);
+    return this.hospitalDataHighlightService.update(id, updateHospitalDataHighlightDto);
   }
 
   @Delete(':id')

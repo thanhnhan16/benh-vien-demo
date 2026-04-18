@@ -29,7 +29,7 @@ export class HospitalController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalDto: UpdateHospitalDto) {
-    return this.hospitalService.update(+id, updateHospitalDto);
+    return this.hospitalService.update(id, updateHospitalDto);
   }
 
   @Delete(':id')

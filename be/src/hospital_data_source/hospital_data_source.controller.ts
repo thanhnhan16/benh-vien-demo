@@ -24,7 +24,7 @@ export class HospitalDataSourceController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateHospitalDataSourceDto: UpdateHospitalDataSourceDto) {
-    return this.hospitalDataSourceService.update(+id, updateHospitalDataSourceDto);
+    return this.hospitalDataSourceService.update(id, updateHospitalDataSourceDto);
   }
 
   @Delete(':id')

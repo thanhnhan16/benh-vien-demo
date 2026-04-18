@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateHospitalDto {
@@ -48,4 +48,8 @@ export class CreateHospitalDto {
   @IsOptional()
   @IsString()
   website?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isFeatured?: boolean;
 }

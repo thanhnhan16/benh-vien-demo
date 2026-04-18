@@ -27,8 +27,8 @@ export class HospitalDataSourceService {
     return `This action returns a #${id} hospitalDataSource`;
   }
 
-  update(id: number, updateHospitalDataSourceDto: UpdateHospitalDataSourceDto) {
-    return `This action updates a #${id} hospitalDataSource`;
+  update(id: String, updateHospitalDataSourceDto: UpdateHospitalDataSourceDto) {
+       return this.model.findByIdAndUpdate(id, updateHospitalDataSourceDto, { returnDocument: 'after' });
   }
 
   remove(id: number) {
