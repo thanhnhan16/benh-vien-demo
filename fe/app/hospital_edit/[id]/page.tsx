@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,14 @@ const [dataSourcesEdit, setdataSourcesEdit] = useState<any>(null);
 const [dataHighLightEdit, setdataHighLightEdit] = useState<any>(null);
 const [readinessEdit, setReadinessEdit] = useState<any>(null);
 
+const specialCasesRef = useRef<HTMLTableRowElement | null>(null);
+const icuCasesRef = useRef<HTMLTableRowElement | null>(null);
+
+const [errors, setErrors] = useState({
+  patientPerYear: "",
+  specialCases: "",
+  icuCases:""
+});
 
 
 
@@ -53,6 +61,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
 };
 
  const handleEdit = async () => {
+    if (!validateStrengths()) return;
   
     try {
     //update hospital
@@ -107,6 +116,57 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
   }
  }
 
+ //Validation
+ const validateStrengths = () => {
+  const patient = Number(strengthsEdit?.patientPerYear || 0);
+  const special = Number(strengthsEdit?.specialCases || 0);
+  const icu = Number(strengthsEdit?.icuCases || 0);
+
+  let newErrors = {
+    patientPerYear: "",
+    specialCases: "",
+    icuCases: ""
+  };
+
+// check specialCases
+  if (special > patient) {
+    newErrors.specialCases =
+      "Số ca bệnh đặc thù phải nhỏ hơn số bệnh nhân/năm";
+    alert("Số ca bệnh đặc thù phải nhỏ hơn số bệnh nhân/năm")
+    setErrors(newErrors);
+
+    setTimeout(() => {
+      specialCasesRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }, 100);
+
+    return false;
+  }
+
+  // check icuCases
+  if (icu > patient) {
+    newErrors.icuCases =
+      "Số ca nặng phải nhỏ hơn số bệnh nhân/năm";
+    alert("Số ca nặng phải nhỏ hơn số bệnh nhân/năm")
+    setErrors(newErrors);
+
+    setTimeout(() => {
+      icuCasesRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }, 100);
+
+    return false;
+  }
+
+  setErrors(newErrors);
+  return true;
+};
+ 
+
   return (
     <div className="p-6 space-y-6">
       <button
@@ -153,14 +213,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                 onChange={(e) => setHospitalEdit({...hospitalEdit, managingOrg: e.target.value})}/>               
               </td>
             </tr>
-            <tr>
-              <td className="font-semibold w-1/3 border">Chuyên khoa chính:</td>
-              <td className="border">
-                <input className="w-full" type="text" 
-                value={hospitalEdit?.mainSpecialty} 
-               onChange={(e) => setHospitalEdit({...hospitalEdit, mainSpecialty: e.target.value})}/>                
-              </td>
-            </tr>
+           
             <tr>
               <td className="font-semibold w-1/3 border">Chuyên khoa mũi nhọn:</td>
               <td className="border">
@@ -180,7 +233,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
             
 
              <tr>
-              <td className="font-semibold w-1/3 border">Ngoại trú/năm:</td>
+              <td className="font-semibold w-1/3 border">Ngoại trú/năm (Theo năm gần nhất):</td>
               <td className="border">
                 <input className="w-full" type="number" min={0}
                 value={hospitalEdit?.outpatientPerYear} 
@@ -188,7 +241,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </td>
             </tr>
              <tr>
-              <td className="font-semibold w-1/3 border">Nội trú/năm:</td>
+              <td className="font-semibold w-1/3 border">Nội trú/năm (Theo năm gần nhất):</td>
               <td className="border">
                 <input className="w-full" type="number" min={0}
                   value={hospitalEdit?.inpatientPerYear}
@@ -196,7 +249,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/3 border">Phẫu thuật/năm:</td>
+              <td className="font-semibold w-1/3 border">Phẫu thuật/năm (Theo năm gần nhất):</td>
               <td className="border">
                 <input className="w-full" type="number" min={0}
                   value={hospitalEdit?.surgeryPerYear}
@@ -364,7 +417,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
          <table className="w-full border">
           <tbody>
             <tr>
-              <td className="font-semibold w-1/2 border">Chuyên khoa chính</td>
+              <td className="font-semibold w-1/2 border">Chuyên khoa mũi nhọn</td>
               <td className="border">
                 <input type="text" 
                 value={strengthsEdit?.mainSpecialty} 
@@ -434,35 +487,35 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
             <table className="w-full border ">           
             <tbody>
              <tr>
-              <td className="font-semibold w-1/2 border">Số bệnh nhân/năm</td>
+              <td className="font-semibold w-1/2 border">Số bệnh nhân/năm (Theo năm gần nhất)</td>
               <td className="border">
                 <input type="number" min={0}
                 value={strengthsEdit?.patientPerYear} 
-                className="w-full h-full py-2"
+               className={`w-full h-full py-2 ${errors.specialCases ||errors.icuCases ? "text-red-500 " : ""}`}
                 
                 onChange={(e) => setStrengthsEdit({...strengthsEdit, patientPerYear: e.target.value})}/>
              </td>
             </tr>
-            <tr>
-              <td className="font-semibold w-1/2 border">Số ca bệnh đặc thù/năm</td>
-              <td className="border">
-                <input type="number" min={0}
+            <tr ref={specialCasesRef}>
+              <td className="font-semibold w-1/2 border">Số ca bệnh đặc thù/năm (Theo năm gần nhất)</td>
+              <td className={`border`}>
+                <input type="number" min={0} 
                 value={strengthsEdit?.specialCases} 
-                className="w-full h-full py-2"
+                className={`w-full h-full py-2 ${errors.specialCases ? "text-red-500 " : ""}`}
                 onChange={(e) => setStrengthsEdit({...strengthsEdit, specialCases: e.target.value})}/>
               </td>
             </tr>
-            <tr>
+            <tr ref={icuCasesRef}>
               <td className="font-semibold w-1/2 border">Số ca nặng / ICU / cấp cứu liên quan</td>
-              <td className="border">
+              <td className={`border`}>
                 <input type="number" min={0}
                 value={strengthsEdit?.icuCases} 
-                className="w-full h-full py-2"
+                className={`w-full h-full py-2 ${errors.icuCases ? "text-red-500 " : ""}`}
                 onChange={(e) => setStrengthsEdit({...strengthsEdit, icuCases: e.target.value})}/>
                 </td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/2 border">Thời gian tích lũy dữ liệu của chuyên khoa thế mạnh</td>
+              <td className="font-semibold w-1/2 border">Thời gian tích lũy dữ liệu của chuyên khoa thế mạnh (VD: 5 năm, 2020-2025)</td>
               <td className="border">
                 <input type="text" 
                 value={strengthsEdit?.dataDuration} 
@@ -471,9 +524,9 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                 </td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/2 border">Số năm triển khai kỹ thuật đặc thù</td>
+              <td className="font-semibold w-1/2 border">Số năm triển khai kỹ thuật đặc thù (VD: 5 năm, 2020-2025)</td>
               <td className="border">
-                 <input type="number" min={0}
+                 <input 
                 value={strengthsEdit?.techYears} 
                 className="w-full h-full py-2"
                 onChange={(e) => setStrengthsEdit({...strengthsEdit, techYears: e.target.value})}/>
@@ -498,7 +551,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                 </td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/2 border">Theo dõi bao lâu</td>
+              <td className="font-semibold w-1/2 border">Thời gian theo dõi (VD: 5 năm, 2020-2025)</td>
               <td className="border">
                 <input type="text" 
                 value={strengthsEdit?.trackingTime || "Không có thông tin"} 
@@ -523,7 +576,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                 </td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/2 border">Nhóm bệnhcó thể đại diện tiêu biểu cho TP.HCM</td>
+              <td className="font-semibold w-1/2 border">Nhóm bệnh có thể đại diện tiêu biểu cho TP.HCM</td>
               <td className="border">
                 <input type="text" 
                 value={strengthsEdit?.representativeDiseases || "Không có thông tin"} 
@@ -546,12 +599,15 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
 
       {/* ⚠️ PROBLEMS */}
       <Section title="PHẦN B. DANH MỤC BÀI TOÁN/ VẤN ĐỀ CẦN GIẢI QUYẾT ƯU TIÊN">
-      {problemEdit.map((p: any, i: number) => (
+      {problemEdit.map((p: any, i: number) => 
+      {
+        const selected = p.affected ? p.affected.split(", ") : [];
+        return (
         <div  key={p._id} className="p-1 rounded mb-3 gap-x-6 gap-y-2">
           <table className="w-full ">
             <tbody>
               <tr>
-                <td className="font-semibold w-1/2 border">Tên bài toán</td>
+                <td className="font-semibold w-1/2 border">Tên bài toán / vấn đề cần giải quyết</td>
                 <td className="border">
                     <input type="text" 
                     className="w-full"
@@ -570,7 +626,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Mô tả</td>
+                <td className="font-semibold border">Mô tả bài toán / vấn đề</td>
                 <td className="border">
                      <input type="text" 
                     className="w-full"
@@ -608,7 +664,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Bối cảnh</td>
+                <td className="font-semibold border">Bối cảnh xuất hiện bài toán</td>
                 <td className="border">
                      <input type="text" 
                     className="w-full"
@@ -627,7 +683,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Tần suất</td>
+                <td className="font-semibold border">Tần suất biểu hiện</td>
                 <td className="border">
                      <input type="text" 
                     className="w-full"
@@ -646,7 +702,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Mức độ</td>
+                <td className="font-semibold border">Mức độ nghiêm trọng</td>
                 <td className="border">
                       <input type="text" 
                     className="w-full"
@@ -684,26 +740,74 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Đối tượng</td>
-                <td className="border">
-                    <input type="text" 
-                    className="w-full"
-                    value={p.affected}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
-                        item._id === p._id
-                            ? { ...item, affected: e.target.value }
-                            : item
-                        );
+                <td className="font-semibold border">Đối tượng chịu ảnh hưởng</td>
 
-                        setProblemEdit(newProblem);
-                    }}
-                    />
+                <td className="border">
+                  <div className="p-2">
+
+                    {/* Selected Tags */}
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {selected.map((item: string) => (
+                        <div
+                          key={item}
+                          className="bg-blue-100 text-blue-700 px-2 py-1 rounded flex items-center gap-1"
+                        >
+                          {item}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newValues = selected.filter((v: string) => v !== item);
+
+                              const newProblem = problemEdit.map((item2: any) =>
+                                item2._id === p._id
+                                  ? { ...item2, affected: newValues.join(", ") }
+                                  : item2
+                              );
+
+                              setProblemEdit(newProblem);
+                            }}
+                            className="text-blue-500 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Select thêm */}
+                    <select
+                      className="border p-2 rounded w-full"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (!value) return;
+
+                        if (!selected.includes(value)) {
+                          const newValues = [...selected, value];
+
+                          const newProblem = problemEdit.map((item2: any) =>
+                            item2._id === p._id
+                              ? { ...item2, affected: newValues.join(", ") }
+                              : item2
+                          );
+
+                          setProblemEdit(newProblem);
+                        }
+                      }}
+                    >
+                      <option value="">Chọn đối tượng</option>
+                      <option>Bác sĩ</option>
+                      <option>Điều dưỡng</option>
+                      <option>Dược sĩ</option>
+                      <option>Bệnh nhân</option>
+                      <option>Quản lý</option>
+                      <option>Khác</option>
+                    </select>
+                  </div>
                 </td>
               </tr>
 
               <tr>
-                <td className="font-semibold border">Quyết định cần hỗ trợ</td>
+                <td className="font-semibold border">Quyết định nào hiện đang cần được hỗ trợ </td>
                 <td className="border">
                     <input type="text" 
                     className="w-full"
@@ -722,7 +826,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Giải pháp hiện tại</td>
+                <td className="font-semibold border">Hiện đã có giải pháp chưa</td>
                 <td className="border"> 
                     <input type="text" 
                     className="w-full"
@@ -741,7 +845,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Hạn chế</td>
+                <td className="font-semibold border">Hạn chế của giải pháp hiện có</td>
                 <td className="border">
                     <input type="text" 
                     className="w-full"
@@ -760,7 +864,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Giá trị</td>
+                <td className="font-semibold border">Nếu giải được, giá trị mang lại là gì</td>
                 <td className="border">
                      <input type="text" 
                     className="w-full"
@@ -779,10 +883,13 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Chỉ số</td>
-                <td className="border">
+                <td className="font-semibold border">
+                  Chỉ số nào sẽ cải thiện nếu giải được. 
+                  ví dụ: giảm thời gian chờ, giảm biến chứng, giảm tái nhập viện, tăng độ chính xác chẩn đoán, giảm chi phí, giảm quá tải,...
+                  </td> 
+                <td className="border p-0 h-10">
                      <input type="text" 
-                    className="w-full"
+                    className="w-full h-full"
                     value={p.metric}
                      onChange={(e) => {
                        const newProblem = problemEdit.map((item: any) =>
@@ -798,7 +905,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
               </tr>
 
               <tr>
-                <td className="font-semibold border">Khoa liên quan</td>
+                <td className="font-semibold border">Đơn vị/khoa liên quan chính </td>
                 <td className="border">
                      <input type="text" 
                     className="w-full"
@@ -929,7 +1036,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
             </tbody>
           </table>
         </div>
-      ))}
+      )})}
     </Section>
 
       {/* 📊 DATA SOURCES */}
@@ -956,25 +1063,6 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                        const newDataSources = dataSourcesEdit.map((item: any) =>
                         item._id === d._id
                             ? { ...item, scale: e.target.value }
-                            : item
-                        );
-
-                        setdataSourcesEdit(newDataSources);
-                    }}
-                    />
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td className="font-semibold border">Tần suất phát sinh theo tháng</td>
-                    <td className="border">
-                    <input type="text" 
-                    className="w-full"
-                    value={d.frequency}
-                     onChange={(e) => {
-                       const newDataSources = dataSourcesEdit.map((item: any) =>
-                        item._id === d._id
-                            ? { ...item, frequency: e.target.value }
                             : item
                         );
 
@@ -1044,7 +1132,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
                   </tr>
 
                   <tr>
-                    <td className="font-semibold border">Thời gian tích lũy</td>
+                    <td className="font-semibold border">Thời gian tích lũy (VD: 5 năm, 2020-2025)</td>
                     <td className="border">
                     <input type="text" 
                     className="w-full"
@@ -1134,7 +1222,7 @@ const [readinessEdit, setReadinessEdit] = useState<any>(null);
 
               <tr>
                 <td className="font-semibold border">
-                  Dữ liệu có độ sâu nhất
+                  Dữ liệu có độ sâu nhất (Nhiều lớp thông tin có thể thu thập được cho 1 ca bệnh)
                 </td>
                 <td className="border">
                     <input className="w-full" 

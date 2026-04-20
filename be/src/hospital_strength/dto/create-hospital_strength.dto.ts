@@ -64,9 +64,8 @@ export class CreateHospitalStrengthDto {
   dataDuration?: string;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  techYears?: number;
+  @IsString()
+  techYears?: string;
 
   @IsOptional()
   @IsBoolean()

@@ -33,15 +33,6 @@ function DataItem({ data, index, handleDataSourceChange, fieldErrors }: any) {
             }
           />
 
-          <input
-            placeholder="Tần suất / tháng"
-             className={`border p-2 rounded ${fieldErrors[`dataSources.${index}.frequency`]? "border-red-500": ""}`}
-            value={data.frequency || ""}
-            onChange={(e) =>
-              handleDataSourceChange(index, "frequency", e.target.value)
-            }
-          />
-
           <select
             className={`border p-2 rounded ${fieldErrors[`dataSources.${index}.type`]? "border-red-500": ""}`}
             value={data.type || ""}
@@ -64,7 +55,7 @@ function DataItem({ data, index, handleDataSourceChange, fieldErrors }: any) {
           />
 
           <input
-            placeholder="Đơn vị quản lý"
+            placeholder="Đơn vị quản lý dữ liệu"
             className={`border p-2 rounded ${fieldErrors[`dataSources.${index}.owner`]? "border-red-500": ""}`}
             value={data.owner || ""}
             onChange={(e) =>
@@ -73,7 +64,7 @@ function DataItem({ data, index, handleDataSourceChange, fieldErrors }: any) {
           />
 
           <input
-            placeholder="Thời gian tích lũy"
+            placeholder="Thời gian tích lũy (VD: 5 năm, 2020-2025)"
             className={`border p-2 rounded ${fieldErrors[`dataSources.${index}.duration`]? "border-red-500": ""}`}
             value={data.duration || ""}
             onChange={(e) =>
@@ -115,6 +106,8 @@ export default function HospitalForm() {
   const router = useRouter();
   const [errors, setErrors] = useState<any>({});
   const [fieldErrors, setFieldErrors] = useState<any>({});
+  const [focusField, setFocusField] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const createProblem = () => ({
     id: String(Date.now() + Math.random()),
@@ -536,9 +529,19 @@ const validateHospitalForm = (form: any) => {
     fieldErrors["strengths.specialCases"] = true;
     messages.push("Số ca bệnh đặc thù/năm đang trống");
   }
+  if (form.strengths.specialCases> form.strengths.patientPerYear) {
+    fieldErrors["strengths.specialCases"] = true;
+    fieldErrors["strengths.patientPerYear"] = true;
+    messages.push("Số ca bệnh đặc thù/năm không được lớn hơn số lượng bệnh nhân/năm  ");
+  }
   if (!form.strengths?.icuCases) {
     fieldErrors["strengths.icuCases"] = true;
     messages.push("Số ca nặng / ICU / cấp cứu đang trống");
+  }
+   if (form.strengths.icuCases> form.strengths.patientPerYear) {
+    fieldErrors["strengths.icuCases"] = true;
+    fieldErrors["strengths.patientPerYear"] = true;
+    messages.push("Số ca nặng / ICU / cấp cứu không được lớn hơn số lượng bệnh nhân/năm ");
   }
   if (!form.strengths?.dataDuration) {
     fieldErrors["strengths.dataDuration"] = true;
@@ -713,7 +716,9 @@ const validateHospitalForm = (form: any) => {
 
   //save button
   const handleSubmit = async() => {
-    console.log(form);
+    // console.log(form);
+    //  if (loading) return;
+    //  setLoading(true);
 
     //validate dữ liệu
 
@@ -855,6 +860,17 @@ const validateHospitalForm = (form: any) => {
     }
   };
 
+  //Chọn đối tượng cho nhóm chịu ảnh hưởng 
+  const options = [
+  "Bác sĩ",
+  "Điều dưỡng",
+  "Dược sĩ",
+  "Bệnh nhân",
+  "Quản lý",
+  "Khác"
+];
+
+
   
 
   return (
@@ -957,7 +973,7 @@ const validateHospitalForm = (form: any) => {
         />
 
         <input
-          placeholder="Số lượt khám ngoại trú / năm"
+          placeholder="Số lượt khám ngoại trú/năm (Theo năm gần nhất)"
          className={`border p-2 rounded ${ fieldErrors["hospital.outpatientPerYear"]  ? "border-red-500" : ""}`}
           value={form.hospital.outpatientPerYear || ""}
           type="number"
@@ -968,7 +984,7 @@ const validateHospitalForm = (form: any) => {
         />
 
         <input
-          placeholder="Số ca nội trú / năm"
+          placeholder="Số ca nội trú/năm (Theo năm gần nhất)"
           className={`border p-2 rounded ${ fieldErrors["hospital.inpatientPerYear"]  ? "border-red-500" : ""}`}
           value={form.hospital.inpatientPerYear || ""}
           type="number"
@@ -979,7 +995,7 @@ const validateHospitalForm = (form: any) => {
         />
 
         <input
-          placeholder="Số ca phẫu thuật / năm"
+          placeholder="Số ca phẫu thuật/năm (Theo năm gần nhất)"
           className={`border p-2 rounded ${ fieldErrors["hospital.surgeryPerYear"]  ? "border-red-500" : ""}`}
           value={form.hospital.surgeryPerYear || ""}
           type="number"
@@ -1103,7 +1119,7 @@ const validateHospitalForm = (form: any) => {
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <input
-              placeholder="Chuyên khoa chính"
+              placeholder="Chuyên khoa mũi nhọn"
               className={`border p-2 rounded col-span-2 ${ fieldErrors["strengths.mainSpecialty"]  ? "border-red-500" : ""}`}
               value={form.strengths.mainSpecialty}
               onChange={(e) =>
@@ -1172,7 +1188,7 @@ const validateHospitalForm = (form: any) => {
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <input
-              placeholder="Số bệnh nhân / năm"
+              placeholder="Số bệnh nhân/năm (Theo năm gần nhất)"
               className={`border p-2 rounded col-span-2 ${ fieldErrors["strengths.patientPerYear"]  ? "border-red-500" : ""}`}
               value={form.strengths.patientPerYear}
               type="number"
@@ -1183,7 +1199,7 @@ const validateHospitalForm = (form: any) => {
             />
 
             <input
-              placeholder="Số ca bệnh đặc thù / năm"
+              placeholder="Số ca bệnh đặc thù/năm (Theo năm gần nhất)"
              className={`border p-2 rounded col-span-2 ${ fieldErrors["strengths.specialCases"]  ? "border-red-500" : ""}`}
               value={form.strengths.specialCases}
                type="number"
@@ -1205,7 +1221,7 @@ const validateHospitalForm = (form: any) => {
             />
 
             <input
-              placeholder="Thời gian tích lũy dữ liệu"
+              placeholder="Thời gian tích lũy dữ liệu (VD: 5 năm, 2020-2025)"
               className={`border p-2 rounded col-span-2 ${ fieldErrors["strengths.dataDuration"]  ? "border-red-500" : ""}`}
               value={form.strengths.dataDuration}
               onChange={(e) =>
@@ -1214,11 +1230,9 @@ const validateHospitalForm = (form: any) => {
             />
 
             <input
-              placeholder="Số năm triển khai kỹ thuật"
+              placeholder="Số năm triển khai kỹ thuật đặc thù (VD: 5 năm, 2020-2025)"
               className={`border p-2 rounded col-span-2 ${ fieldErrors["strengths.techYears"]  ? "border-red-500" : ""}`}
               value={form.strengths.techYears}
-              type="number"
-              min={0}
               onChange={(e) =>
                 handleChange("strengths", "techYears", e.target.value)
               }
@@ -1246,7 +1260,7 @@ const validateHospitalForm = (form: any) => {
 
 
             <input
-              placeholder="Thời gian theo dõi"
+              placeholder="Thời gian theo dõi (VD: 5 năm, 2020-2025)"
               className={`border p-2 rounded ${
                 !form.strengths.longTermData
                   ? "bg-gray-100 cursor-not-allowed"
@@ -1297,23 +1311,33 @@ const validateHospitalForm = (form: any) => {
       {/* Tab 3 */}
       {activeTab === 2 && (
         <div className="border p-4 rounded-xl">
-         
+         <div><h2 className="text-xl font-semibold mb-4">(Liệt kê tối thiểu 5 bài toán cần giải quyết)</h2></div>
+          {form.problems.map((p, i) => {
+            const selected = p.affected ? p.affected.split(", ") : [];
 
-          {form.problems.map((p, i) => (
+            const options = [
+              "Bác sĩ",
+              "Điều dưỡng",
+              "Dược sĩ",
+              "Bệnh nhân",
+              "Quản lý",
+              "Khác"
+            ];
+          return (          
             <div key={p.id} className="border p-4 mb-4 rounded-xl">
                 <h2 className="text-xl font-semibold mb-4">
                   {i+1}.
                 </h2>
               <div className="grid grid-cols-2 gap-3">
                 <input 
-                  placeholder="Tên bài toán" 
+                  placeholder="Tên bài toán / vấn đề cần giải quyết" 
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.name`] ? "border-red-500" : ""}`}
                   value={p.name}
                   onChange={(e) => handleProblemChange(i, "name", e.target.value)}
                 />
                 
                 <input 
-                  placeholder="Mô tả ngắn"
+                  placeholder="Mô tả bài toán / vấn đề"
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.description`] ? "border-red-500" : ""}`}
                   value={p.description}
                   onChange={(e) => handleProblemChange(i, "description", e.target.value)}
@@ -1374,23 +1398,58 @@ const validateHospitalForm = (form: any) => {
                   <option>Toàn bệnh viện</option>
                   <option>Toàn ngành</option>
                 </select>
+                
+                <div className={`border p-2 rounded col-span-2 ${fieldErrors[`problems.${i}.affected`] ? "border-red-500" : ""}`}>
+                  <div className="text-sm mb-1 ">
+                    Đối tượng chịu ảnh hưởng :
+                  </div>
 
-                <select 
-                className={`border p-2 rounded ${fieldErrors[`problems.${i}.affected`] ? "border-red-500" : ""}`}
-                value={p.affected}
-                onChange={(e) => handleProblemChange(i, "affected", e.target.value)}
-                >
-                  <option value={""}>Ai chịu ảnh hưởng</option>
-                  <option>Bác sĩ</option>
-                  <option>Điều dưỡng</option>
-                  <option>Dược sĩ</option>
-                  <option>Bệnh nhân</option>
-                  <option>Quản lý</option>
-                  <option>Khác</option>
-                </select>
+                  {/* Selected Tags */}
+                  <div className={`flex flex-wrap gap-2 mb-2 `}>
+                    {selected.map((item: string) => (
+                      <div
+                        key={item}
+                        className={`bg-blue-100 text-blue-700 px-2 py-1 rounded flex items-center gap-1 `}
+                      >
+                        {item}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newValues = selected.filter(v => v !== item);
+                            handleProblemChange(i, "affected", newValues.join(", "));
+                          }}
+                          className="text-blue-500 hover:text-red-500"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Select */}
+                  <select
+                    className={`border p-2 rounded w-full ${fieldErrors[`problems.${i}.affected`] ? "border-red-500" : ""}`}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (!value) return;
+
+                      if (!selected.includes(value)) {
+                        const newValues = [...selected, value];
+                        handleProblemChange(i, "affected", newValues.join(", "));
+                      }
+                    }}
+                  >
+                    <option value="">Chọn đối tượng bị ảnh hưởng</option>
+                    {options.map((opt) => (
+                      <option key={opt} value={opt}>
+                        {opt}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 <input 
-                placeholder="Quyết định cần hỗ trợ" 
+                placeholder="Quyết định nào hiện đang cần được hỗ trợ " 
                 className={`border p-2 rounded ${fieldErrors[`problems.${i}.decision`] ? "border-red-500" : ""}`}
                 value={p.decision}
                 onChange={(e) => handleProblemChange(i, "decision", e.target.value)}
@@ -1400,7 +1459,7 @@ const validateHospitalForm = (form: any) => {
                 value={p.solution}
                 onChange={(e) => handleProblemChange(i, "solution", e.target.value)}
                 >
-                  <option value={""}>Giải pháp hiện tại</option>
+                  <option value={""}>Hiện đã có giải pháp chưa</option>
                   <option>Có</option>
                   <option>Chưa</option>
                   <option>Có ở thế giới, chưa có ở Việt Nam</option>
@@ -1408,32 +1467,40 @@ const validateHospitalForm = (form: any) => {
                 </select>
 
                 <input 
-                  placeholder="Hạn chế" 
+                  placeholder="Hạn chế của giải pháp hiện có" 
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.limitation`] ? "border-red-500" : ""}`}
                   value={p.limitation}
                   onChange={(e) => handleProblemChange(i, "limitation", e.target.value)}
                 />
 
                 <input 
-                  placeholder="Giá trị mang lại" 
+                  placeholder="Nếu giải được, giá trị mang lại là gì" 
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.value`] ? "border-red-500" : ""}`}
                   value={p.value}
                   onChange={(e) => handleProblemChange(i, "value", e.target.value)}
                 />
 
                 <input 
-                  placeholder="Chỉ số cải thiện" 
+                  placeholder="Chỉ số nào sẽ cải thiện nếu giải được" 
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.metric`] ? "border-red-500" : ""}`}
                   value={p.metric}
                   onChange={(e) => handleProblemChange(i, "metric", e.target.value)}
+                  onFocus={() => setFocusField("vd")}
+                  onBlur={() => setFocusField("")}
                 />
+                
 
                 <input 
-                  placeholder="Khoa liên quan" 
+                  placeholder="Đơn vị/khoa liên quan chính" 
                   className={`border p-2 rounded ${fieldErrors[`problems.${i}.department`] ? "border-red-500" : ""}`}
                   value={p.department}
                   onChange={(e) => handleProblemChange(i, "department", e.target.value)}
                 />
+                {focusField === "vd" && (
+                  <label className="col-span-2 w-full text-sm rounded break-words whitespace-normal">
+                    ví dụ: giảm thời gian chờ, giảm biến chứng, giảm tái nhập viện, tăng độ chính xác chẩn đoán, giảm chi phí, giảm quá tải
+                  </label>
+                )}
                 
               </div>
 
@@ -1501,7 +1568,7 @@ const validateHospitalForm = (form: any) => {
                 )}
             </div>
          
-          ))}
+          )})}
 
           <button
             onClick={addProblem}
@@ -1553,7 +1620,7 @@ const validateHospitalForm = (form: any) => {
               }
             />
             <input
-              placeholder="Dữ liệu nào có độ sâu nhất"
+              placeholder="Dữ liệu nào có độ sâu nhất (Nhiều lớp thông tin có thể thu thập được cho 1 ca bệnh)"
               className={`border p-2 rounded col-span-2 ${ fieldErrors["dataHightLight.deepestData"]  ? "border-red-500" : ""}`}
               value={form.dataHightLight.deepestData}
               onChange={(e) =>
@@ -1851,6 +1918,7 @@ const validateHospitalForm = (form: any) => {
 
         <button
           onClick={handleSubmit}
+          // disabled={loading}
           className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
         >
           Save

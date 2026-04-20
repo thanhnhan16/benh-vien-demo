@@ -42,7 +42,7 @@ export class HospitalStrength {
   dataDuration?: string;
 
   @Prop()
-  techYears?: number;
+  techYears?: string;
 
   @Prop()
   longTermData?: boolean;

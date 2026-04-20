@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"dbc83de1b4d2457db256d36119af0888","collectionName":"hospital_problems","type":"collection"}

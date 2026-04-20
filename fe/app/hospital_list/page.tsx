@@ -83,11 +83,6 @@ export default function HospitalList() {
               </div>
 
               <div>
-                <span className="font-medium">Chuyên khoa chính:</span>{" "}
-                {hospital.mainSpecialty}
-              </div>
-
-              <div>
                 <span className="font-medium">Chuyên khoa mũi nhọn:</span>{" "}
                 {hospital.keySpecialty}
               </div>

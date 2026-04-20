@@ -59,7 +59,6 @@ const hospitalContactSheet = [
     "Tên bệnh viện": hospital.hospitalName,
     "Loại bệnh viện": hospital.hospitalType,
     "Cơ quan chủ quản": hospital.managingOrg,
-    "Chuyên khoa chính": hospital.mainSpecialty,
     "Chuyên khoa mũi nhọn": hospital.keySpecialty,
     "Giường bệnh": hospital.bedCount,
     "Ngoại trú/năm": hospital.outpatientPerYear,
@@ -109,19 +108,19 @@ const hospitalContactSheet = [
    ...problems.flatMap((p: any, index: number) =>
       toSection(`Bài toán cần giải quyết (${index + 1})`, {
       "Tên bài toán": p.name,
-      "Mô tả": p.description,
-      "Nhóm": p.category,
-      "Bối cảnh": p.context,
-      "Tần suất": p.frequency,
-      "Mức độ": p.severity,
-      "Ảnh hưởng": p.impact,
-      "Đối tượng": p.affected,
-      "Quyết định cần hỗ trợ": p.decision,
-      "Giải pháp hiện tại": p.solution,
-      "Hạn chế": p.limitations,
-      "Giá trị": p.value,
-      "Chỉ số": p.metric,
-      "Khoa liên quan": p.department,
+      "Mô tả bài toán / vấn đề": p.description,
+      "Nhóm bài toán": p.category,
+      "Bối cảnh xuất hiện bài toán ": p.context,
+      "Tần suất biểu hiện": p.frequency,
+      "Mức độ nghiêm trọng": p.severity,
+      "Quy mô ảnh hưởng": p.impact,
+      "Đối tượng chịu ảnh hưởng": p.affected,
+      "Quyết định nào hiện đang cần được hỗ trợ": p.decision,
+      "Hiện đã có giải pháp chưa": p.solution,
+      "Hạn chế của giải pháp hiện có": p.limitations,
+      "Nếu giải được, giá trị mang lại là gì": p.value,
+      "Chỉ số nào sẽ cải thiện nếu giải được": p.metric,
+      "Đơn vị/khoa liên quan chính": p.department,
       })
 ),
 
@@ -130,12 +129,11 @@ const hospitalContactSheet = [
  ...dataSources.flatMap((d: any, index: number) =>
       toSection(d.name, {
         "Quy mô dữ liệu": d.scale,
-        "Tần suất": d.frequency,
-        "Loại dữ liệu": d.type,
-        "Hệ thống lưu trữ": d.system,
-        "Đơn vị quản lý": d.owner,
+        "Liên tục hay rời rạc": d.type,
+        "Lưu ở hệ thống nào": d.system,
+        "Đơn vị quản lý dữ liệu": d.owner,
         "Thời gian tích lũy": d.duration,
-        "Có thể xuất": d.exportable ? "Có" : "Không",
+        "Có trích xuất được không": d.exportable ? "Có" : "Không",
         "Ghi chú": d.note,
       })
 ),
@@ -250,10 +248,6 @@ const createSheet = (data: any[]) => {
               <td>{hospital?.managingOrg }</td>
             </tr>
             <tr>
-              <td className="font-semibold w-1/3">Chuyên khoa chính:</td>
-              <td>{hospital?.mainSpecialty }</td>
-            </tr>
-            <tr>
               <td className="font-semibold w-1/3">Chuyên khoa mũi nhọn:</td>
               <td>{hospital?.keySpecialty }</td>
             </tr>
@@ -360,14 +354,14 @@ const createSheet = (data: any[]) => {
         ))}
        
     </Section>
-      
+    
 
       {/* 🧠 STRENGTHS */}
       <Section title="🧠 Thế mạnh chuyên môn">
          <table className="w-full">
           <tbody>
             <tr>
-              <td className="font-semibold w-1/2">Chuyên khoa chính</td>
+              <td className="font-semibold w-1/2">Chuyên khoa mũi nhọn</td>
               <td>{strengths?.mainSpecialty }</td>
             </tr>
             <tr>
@@ -462,17 +456,17 @@ const createSheet = (data: any[]) => {
               </tr>
 
               <tr>
-                <td className="font-semibold">Bối cảnh</td>
+                <td className="font-semibold">Bối cảnh xuất hiện bài toán</td>
                 <td>{p.context}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Tần suất</td>
+                <td className="font-semibold">Tần suất biểu hiện</td>
                 <td>{p.frequency}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Mức độ</td>
+                <td className="font-semibold">Mức độ nghiêm trọng</td>
                 <td>{p.severity}</td>
               </tr>
 
@@ -482,37 +476,37 @@ const createSheet = (data: any[]) => {
               </tr>
 
               <tr>
-                <td className="font-semibold">Đối tượng</td>
+                <td className="font-semibold">Đối tượng chịu ảnh hưởng</td>
                 <td>{p.affected}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Quyết định cần hỗ trợ</td>
+                <td className="font-semibold">Quyết định nào hiện đang cần được hỗ trợ</td>
                 <td>{p.decision}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Giải pháp hiện tại</td>
+                <td className="font-semibold">Hiện đã có giải pháp chưa</td>
                 <td>{p.solution}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Hạn chế</td>
+                <td className="font-semibold">Hạn chế của giải pháp hiện có</td>
                 <td>{p.limitations || "Không có thông tin"}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Giá trị</td>
+                <td className="font-semibold">Nếu giải được, giá trị mang lại là gì </td>
                 <td>{p.value}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Chỉ số</td>
+                <td className="font-semibold">Chỉ số nào sẽ cải thiện nếu giải được</td>
                 <td>{p.metric}</td>
               </tr>
 
               <tr>
-                <td className="font-semibold">Khoa liên quan</td>
+                <td className="font-semibold">Đơn vị/khoa liên quan chính </td>
                 <td>{p.department}</td>
               </tr>
 
@@ -561,11 +555,6 @@ const createSheet = (data: any[]) => {
                   <tr>
                     <td className="font-semibold">Quy mô dữ liệu hiện có</td>
                     <td>{d.scale}</td>
-                  </tr>
-
-                  <tr>
-                    <td className="font-semibold">Tần suất phát sinh theo tháng</td>
-                    <td>{d.frequency}</td>
                   </tr>
 
                   <tr>
