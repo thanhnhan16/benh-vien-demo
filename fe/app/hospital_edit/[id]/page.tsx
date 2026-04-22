@@ -647,19 +647,29 @@ const [errors, setErrors] = useState({
               <tr>
                 <td className="font-semibold border">Nhóm bài toán</td>
                 <td className="border">
-                     <input type="text" 
+                  <select
                     className="w-full"
-                    value={p.category}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
+                    value={p.category || ""}
+                    onChange={(e) => {
+                      const newProblem = problemEdit.map((item: any) =>
                         item._id === p._id
-                            ? { ...item, category: e.target.value }
-                            : item
-                        );
+                          ? { ...item, category: e.target.value }
+                          : item
+                      );
 
-                        setProblemEdit(newProblem);
+                      setProblemEdit(newProblem);
                     }}
-                    />
+                  >
+                    <option value="Chẩn đoán">Chẩn đoán</option>
+                    <option value="Điều trị">Điều trị</option>
+                    <option value="Dự phòng">Dự phòng</option>
+                    <option value="Quản lý bệnh mạn">Quản lý bệnh mạn</option>
+                    <option value="Vận hành bệnh viện">Vận hành bệnh viện</option>
+                    <option value="Chăm sóc bệnh nhân">Chăm sóc bệnh nhân</option>
+                    <option value="Dược lâm sàng">Dược lâm sàng</option>
+                    <option value="Quản lý">Quản lý</option>
+                    <option value="Khác">Khác</option>
+                  </select>
                 </td>
               </tr>
 
@@ -685,57 +695,70 @@ const [errors, setErrors] = useState({
               <tr>
                 <td className="font-semibold border">Tần suất biểu hiện</td>
                 <td className="border">
-                     <input type="text" 
+                    <select
                     className="w-full"
-                    value={p.frequency}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
+                    value={p.frequency || ""}
+                    onChange={(e) => {
+                      const newProblem = problemEdit.map((item: any) =>
                         item._id === p._id
-                            ? { ...item, frequency: e.target.value }
-                            : item
-                        );
+                          ? { ...item, frequency: e.target.value }
+                          : item
+                      );
 
-                        setProblemEdit(newProblem);
+                      setProblemEdit(newProblem);
                     }}
-                    />
+                  >
+                    <option value="cao">Cao</option>
+                    <option value="Trung bình">Trung bình</option>
+                    <option value="Thấp">Thấp</option>
+                  </select>
                 </td>
               </tr>
 
               <tr>
                 <td className="font-semibold border">Mức độ nghiêm trọng</td>
                 <td className="border">
-                      <input type="text" 
+                    <select
                     className="w-full"
-                    value={p.severity}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
+                    value={p.severity || ""}
+                    onChange={(e) => {
+                      const newProblem = problemEdit.map((item: any) =>
                         item._id === p._id
-                            ? { ...item, severity: e.target.value }
-                            : item
-                        );
+                          ? { ...item, severity: e.target.value }
+                          : item
+                      );
 
-                        setProblemEdit(newProblem);
+                      setProblemEdit(newProblem);
                     }}
-                    />
+                  >
+                    <option value="cao">Cao</option>
+                    <option value="Trung bình">Trung bình</option>
+                    <option value="Thấp">Thấp</option>
+                  </select>
                 </td>
               </tr>
 
               <tr>
                 <td className="font-semibold border">Quy mô ảnh hưởng</td>
                 <td className="border">
-                     <input type="text" 
+                    <select
                     className="w-full"
-                    value={p.impact}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
+                    value={p.severity || ""}
+                    onChange={(e) => {
+                      const newProblem = problemEdit.map((item: any) =>
                         item._id === p._id
-                            ? { ...item, impact: e.target.value }
-                            : item
-                        );
+                          ? { ...item, severity: e.target.value }
+                          : item
+                      );
 
-                        setProblemEdit(newProblem);
+                      setProblemEdit(newProblem);
                     }}
-                    />
+                  >
+                    <option value="Một khoa">Một khoa</option>
+                    <option value="Nhiều khoa">Nhiều khoa</option>
+                    <option value="Toàn bệnh viện">Toàn bệnh viện</option>
+                    <option value="Toàn ngành">Toàn ngành</option>
+                  </select>
                 </td>
               </tr>
 
@@ -828,7 +851,7 @@ const [errors, setErrors] = useState({
               <tr>
                 <td className="font-semibold border">Hiện đã có giải pháp chưa</td>
                 <td className="border"> 
-                    <input type="text" 
+                    {/* <input type="text" 
                     className="w-full"
                     value={p.solution}
                      onChange={(e) => {
@@ -840,7 +863,25 @@ const [errors, setErrors] = useState({
 
                         setProblemEdit(newProblem);
                     }}
-                    />
+                    /> */}
+                     <select
+                    className="w-full"
+                    value={p.solution || ""}
+                    onChange={(e) => {
+                      const newProblem = problemEdit.map((item: any) =>
+                        item._id === p._id
+                          ? { ...item, solution: e.target.value }
+                          : item
+                      );
+
+                      setProblemEdit(newProblem);
+                    }}
+                  >
+                    <option value="có">có</option>
+                    <option value="chưa">chưa</option>
+                    <option value="có ở thế giới nhưng chưa có ở Việt Nam">có ở thế giới nhưng chưa có ở Việt Nam</option>
+                    <option value="có ở Việt Nam nhưng chưa có ở bệnh viện">có ở Việt Nam nhưng chưa có ở bệnh viện</option>
+                  </select>
                 </td>
               </tr>
 
