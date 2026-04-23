@@ -716,9 +716,7 @@ const validateHospitalForm = (form: any) => {
 
   //save button
   const handleSubmit = async() => {
-    // console.log(form);
-    //  if (loading) return;
-    //  setLoading(true);
+
 
     //validate dữ liệu
 
@@ -856,6 +854,10 @@ const validateHospitalForm = (form: any) => {
         router.push("/hospital_list");
 
     } catch (error: any) {
+      if (error.response?.data?.message === "Tên bệnh viện đã tồn tại") {
+          alert("❌ Bệnh viện này đã có tên trên hệ thống!");
+          return;
+        }
       console.log(error.response?.data); 
     }
   };

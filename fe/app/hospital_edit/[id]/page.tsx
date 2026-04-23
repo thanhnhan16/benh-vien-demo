@@ -851,19 +851,6 @@ const [errors, setErrors] = useState({
               <tr>
                 <td className="font-semibold border">Hiện đã có giải pháp chưa</td>
                 <td className="border"> 
-                    {/* <input type="text" 
-                    className="w-full"
-                    value={p.solution}
-                     onChange={(e) => {
-                       const newProblem = problemEdit.map((item: any) =>
-                        item._id === p._id
-                            ? { ...item, solution: e.target.value }
-                            : item
-                        );
-
-                        setProblemEdit(newProblem);
-                    }}
-                    /> */}
                      <select
                     className="w-full"
                     value={p.solution || ""}

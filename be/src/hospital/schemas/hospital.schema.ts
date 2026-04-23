@@ -7,7 +7,7 @@ export type HospitalDocument = Hospital & Document;
   timestamps: true,
 })
 export class Hospital {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   hospitalName?: string;
 
   @Prop()

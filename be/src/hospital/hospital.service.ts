@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateHospitalDto } from './dto/create-hospital.dto';
 import { UpdateHospitalDto } from './dto/update-hospital.dto';
 import { Hospital, HospitalDocument } from './schemas/hospital.schema';
@@ -14,8 +14,20 @@ export class HospitalService {
     private hospitalModel: Model<HospitalDocument>,
   ) {}
   
- create(data: any) {
-  return this.hospitalModel.create(data);
+//  create(data: any) {
+//   return this.hospitalModel.create(data);
+// }
+
+// hospital.service.ts
+async create(createHospitalDto: CreateHospitalDto) {
+  try {
+    return await this.hospitalModel.create(createHospitalDto);
+  } catch (error: any) {
+    if (error.code === 11000) {
+      throw new BadRequestException("Tên bệnh viện đã tồn tại");
+    }
+    throw error;
+  }
 }
 
 
